@@ -73,7 +73,7 @@ functions:
         method: get
         cors: true
   echoYYYYY:
-    handler: handler.echo
+    handler: ./src/handler.echo
     name: ${ self:provider.stage}-${self:custom.grub}-echo
     description: a simple payload echo POST test
     events:

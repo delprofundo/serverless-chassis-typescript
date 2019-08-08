@@ -19,10 +19,9 @@
   },
   "contributors": [
     {
-      "name": "delProfundo <bruno@hypermedia.tech>"
       "name": "paul carter <carterpaulie@gmail.com>"
     }
-  ]
+  ],
   "author": "delProfundo",
   "license": "Apache-2.0",
   "homepage": "https://bitbucket.org/hypermediatech/PROJECTNAME-YYYYY-service#readme",
@@ -35,10 +34,10 @@
     "@types/chai-things": "0.0.33",
     "@types/mocha": "^5.2.7",
     "@types/moment": "^2.13.0",
-    "@types/node": "^12.6.9",
+    "@types/node": "^12.7.1",
     "@types/node-jose": "^1.1.0",
     "@types/prettier": "^1.18.1",
-    "@types/ramda": "^0.26.18",
+    "@types/ramda": "^0.26.19",
     "@types/request": "^2.48.2",
     "@types/request-promise-native": "^1.0.16",
     "@types/rewire": "^2.5.28",
@@ -48,7 +47,7 @@
     "@types/uuid": "^3.4.5",
     "assert": "2.0.0",
     "aws-lambda": "^0.1.2",
-    "aws-sdk": "^2.504.0",
+    "aws-sdk": "^2.505.0",
     "chai": "^4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-things": "0.2.0",
@@ -80,7 +79,7 @@
   "dependencies": {
     "aws-xray-sdk-core": "2.3.4",
     "dynamo-stream-diff": "0.1.0",
-    "jwe-handler": "^2.0.5",
+    "jwe-handler": "^3.0.0",
     "log-winston-aws-level": "1.11.0",
     "moment": "2.24.0",
     "node-jose": "^1.1.3",
