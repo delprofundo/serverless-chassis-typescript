@@ -61,10 +61,10 @@ custom:
 functions:
   authorize:
     name: ${self:provider.stage}-${self:custom.grub}-authorize
-    handler: sec/authorize.handler
+    handler: ./src/sec/authorize.handler
     description: must use US spelling for authorize function.
   pingYYYYY:
-    handler: handler.ping
+    handler: ./src/handler.ping
     name: ${self:provider.stage}-${self:custom.grub}-ping
     description: a simple payload ping GET test
     events:
