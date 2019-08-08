@@ -1,0 +1,94 @@
+service: YYYYY-service
+frameworkVersion:  ">=1.43.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  tracing: true
+  stage: ${opt:stage, self:custom.defaultStage}
+  memorySize: 256
+  timeout: 20
+  environment:
+    DEPLOY_REGION: ${opt:region, self:provider.region}
+    API_ROOT: ${self:custom.domainName}
+    #JWA_PEM_PATH: ${self:custom.jwaPemPath}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+        - cognito-idp:Admin*
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: "*"
+package:
+  include:
+    - configurators
+    - lib
+  exclude:
+    - tmp
+    - .git
+    - .idea
+    - support
+plugins:
+  - serverless-plugin-tracing
+  - serverless-webpack
+  - serverless-plugin-bind-deployment-id
+custom:
+  #warmup:
+  #  cleanFolders: false
+  local: ${file(./environmentSpecific.yml)} #a file for deployment specific values, can be supplied by Param Store
+  webpackIncludeModules: true
+  grub: YYYYY-api
+  defaultStage: dev
+  basePath: YYYYYs
+  #jwaPemPath: ${self:custom.local.jwaPemPath}
+  kmsKeyPath: ${self:custom.local.kmsKeyPath}
+  maxTokenExpiryPath: ${self:custom.local.maxTokenExpiryPath}
+  systemMemberIdPath: ${self:custom.local.systemMemberIdPath}
+  domainName: ${self:custom.local.customDomainName}
+  cognitoUserPoolId: PLACEHOLDER_CREATE_SSM_REFERENCE
+  cognitoRegion: PLACEHOLDER_CREATE_SSM_REFERENCE_OR_HARD_CODE_HERE
+  #honeycombAPIKey: ${self:custom.local.honeycombAPIKey}
+  #honeycombDataset: ${self:custom.local.honeycombDataset}
+  profiles:
+    dev: default
+  #defaultRegion: us-east-1
+  regions:
+    dev: us-east-1
+    uat: us-east-1
+    prod: ap-southeast-2
+functions:
+  authorize:
+    name: ${self:provider.stage}-${self:custom.grub}-authorize
+    handler: sec/authorize.handler
+    description: must use US spelling for authorize function.
+  pingYYYYY:
+    handler: handler.ping
+    name: ${self:provider.stage}-${self:custom.grub}-ping
+    description: a simple payload ping GET test
+    events:
+    - http:
+        path: /ping
+        method: get
+        cors: true
+  echoYYYYY:
+    handler: handler.echo
+    name: ${ self:provider.stage}-${self:custom.grub}-echo
+    description: a simple payload echo POST test
+    events:
+    - http:
+        path: /echo
+        method: post
+        cors: true
+# Resources are essentially CloudFormation scripts. These are kept in the configurators folder
+resources:
+  Resources:
+    #this entry allows access to the otherwise tricky deployment resource
+    __deployment__:
+      Properties:
+        Description: Deployment alias for resources that depend on deployment id
+    ApiGatewayStage: ${file(configurators/apiGatewayStage.yaml)}
+    IamPolicyLambdaDynamo: ${file(configurators/iamPolicyLambdaDynamo.yaml)}
+    PathMapping: ${file(configurators/pathMapping.yaml)}
+

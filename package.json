@@ -1,0 +1,117 @@
+{
+  "name": "PROJECTNAME_YYYYY_service_api",
+  "version": "0.1.0",
+  "description": "YYYYY Service API Interface",
+  "main": "src/handler.ts",
+  "scripts": {
+    "deploy:dev": "node ./node_modules/serverless/bin/serverless deploy -v --stage dev --region us-east-1",
+    "deploy:uat": "node ./node_modules/serverless/bin/serverless deploy -v --stage uat --region ap-southeast-2",
+    "test:unit": "mocha",
+    "test:cover": "nyc mocha",
+    "test:e2e": "mocha --quiet --require should --timeout 10000 'test/e2e/**/**.spec.js'",
+    "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r",
+    "tslint": "tslint --project . --fix",
+    "tslint-check": "tslint-config-prettier-check ./tslint.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org:hypermediatech/PROJECTNAME-YYYYY-service.git"
+  },
+  "contributors": [
+    {
+      "name": "delProfundo <bruno@hypermedia.tech>"
+      "name": "paul carter <carterpaulie@gmail.com>"
+    }
+  ]
+  "author": "delProfundo",
+  "license": "Apache-2.0",
+  "homepage": "https://bitbucket.org/hypermediatech/PROJECTNAME-YYYYY-service#readme",
+  "devDependencies": {
+    "@types/assert": "^1.4.3",
+    "@types/aws-lambda": "^8.10.31",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/chai": "^4.1.7",
+    "@types/chai-as-promised": "^7.1.1",
+    "@types/chai-things": "0.0.33",
+    "@types/mocha": "^5.2.7",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^12.6.9",
+    "@types/node-jose": "^1.1.0",
+    "@types/prettier": "^1.18.1",
+    "@types/ramda": "^0.26.18",
+    "@types/request": "^2.48.2",
+    "@types/request-promise-native": "^1.0.16",
+    "@types/rewire": "^2.5.28",
+    "@types/sinon-chai": "^3.2.2",
+    "@types/source-map-support": "^0.5.0",
+    "@types/typescript": "^2.0.0",
+    "@types/uuid": "^3.4.5",
+    "assert": "2.0.0",
+    "aws-lambda": "^0.1.2",
+    "aws-sdk": "^2.504.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "7.1.1",
+    "chai-things": "0.2.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "cross-env": "5.2.0",
+    "istanbul": "0.4.5",
+    "js-yaml": "3.13.1",
+    "jsdoc": "3.6.3",
+    "mocha": "^6.2.0",
+    "nyc": "14.1.1",
+    "prettier": "1.18.2",
+    "rewire": "4.0.1",
+    "serverless": "1.49.0",
+    "serverless-plugin-bind-deployment-id": "1.1.0",
+    "serverless-plugin-tracing": "2.0.0",
+    "serverless-plugin-warmup": "4.7.0-rc.1",
+    "serverless-webpack": "5.3.1",
+    "should": "13.2.3",
+    "sinon": "^7.4.1",
+    "sinon-chai": "^3.3.0",
+    "ts-loader": "6.0.4",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-immutable": "^6.0.1",
+    "webpack": "^4.39.1",
+    "webpack-node-externals": "1.7.2"
+  },
+  "dependencies": {
+    "aws-xray-sdk-core": "2.3.4",
+    "dynamo-stream-diff": "0.1.0",
+    "jwe-handler": "^2.0.5",
+    "log-winston-aws-level": "1.11.0",
+    "moment": "2.24.0",
+    "node-jose": "^1.1.3",
+    "ramda": "^0.26.1",
+    "request": "2.88.0",
+    "request-promise-native": "1.0.7",
+    "source-map-support": "0.5.13",
+    "uuid": "3.3.2",
+    "validation-tools": "1.10.1"
+  },
+  "nyc": {
+    "all": true,
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "excludee": [
+      "src/common"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary",
+      "html"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  }
+}
