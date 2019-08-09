@@ -9,8 +9,8 @@
 import AWS from "aws-sdk";
 import * as logger from "log-winston-aws-level";
 import extractDynamoStreamDelta  from "dynamo-stream-diff";
-import { DynamoEventResponse, DynamoStreamAssembly } from "../../interface/types";
-import { DynamoDBRecord } from "aws-lambda";
+import { DynamoEventResponse } from "../../interface/types";
+import { DynamoDBRecord, DynamoDBStreamEvent } from "aws-lambda";
 
 /**
  * helper to extract the useful contents from a dynamo stream record including new old and delta
@@ -33,16 +33,16 @@ const processIndividualDynamoRecord = (dynamoRecord: DynamoDBRecord): DynamoEven
 
 /**
  * HOF that takes a dynamoDb stream event, a processor function and a target
- * @param streamEventAssembly
+ * @param streamEvent
  * @param eventProcessorFunction
  * @param target
  * @returns {Promise<any>}
  */
-export const dynamoStreamEventPromisifier = async <T, U, V>(
-  streamEventAssembly: DynamoStreamAssembly<T>,
-  eventProcessorFunction: (ev: DynamoEventResponse, t: U) => V,
-  target: U) => {
-  const reducedEvents = streamEventAssembly.streamEvent.Records.map(processIndividualDynamoRecord);
+export const dynamoStreamEventPromisifier = async <T>(
+  streamEvent: DynamoDBStreamEvent,
+  eventProcessorFunction: (ev: DynamoEventResponse, target: T) => void,
+  target: T) => {
+  const reducedEvents = streamEvent.Records.map(processIndividualDynamoRecord);
   try {
     await Promise.all(
       reducedEvents.map(async (event) => {

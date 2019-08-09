@@ -1,7 +1,8 @@
 import chai, { assert } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { dynamoStreamEventPromisifier } from "../../../../src/lib/awsHelpers/dynamoStream.helper.library";
-import { DynamoEventResponse, DynamoStreamAssembly } from "../../../../src/interface/types";
+import { DynamoEventResponse } from "../../../../src/interface/types";
+import { DynamoDBStreamEvent } from "aws-lambda";
 
 chai.use(chaiAsPromised);
 
@@ -16,9 +17,7 @@ describe("dynamoStream helper library", () => {
     };
 
     it("convert insert stream event", () => {
-      const assembly: DynamoStreamAssembly<string> = {
-        assembly: "test blah",
-        streamEvent: {
+      const streamEvent: DynamoDBStreamEvent = {
           Records: [{
             eventName: "INSERT",
             dynamodb: {
@@ -32,10 +31,9 @@ describe("dynamoStream helper library", () => {
               }
             }
           }]
-        }
       };
 
-      return dynamoStreamEventPromisifier(assembly, eventProcessorFunction, "blah").then(() => {
+      return dynamoStreamEventPromisifier(streamEvent, eventProcessorFunction, "blah").then(() => {
         assert.deepEqual(expectedResult, {
           delta: undefined,
           newRec: {
@@ -50,35 +48,32 @@ describe("dynamoStream helper library", () => {
     });
 
     it("convert modify stream event", () => {
-      const assembly: DynamoStreamAssembly<string> = {
-        assembly: "test blah",
-        streamEvent: {
-          Records: [{
-            eventName: "MODIFY",
-            dynamodb: {
-              StreamViewType: "NEW_AND_OLD_IMAGES",
-              NewImage: {
-                ["value-one"]: {
-                  S: "one-updated"
-                },
-                ["value-two"]: {
-                  S: "two"
-                }
+      const streamEvent: DynamoDBStreamEvent = {
+        Records: [{
+          eventName: "MODIFY",
+          dynamodb: {
+            StreamViewType: "NEW_AND_OLD_IMAGES",
+            NewImage: {
+              ["value-one"]: {
+                S: "one-updated"
               },
-              OldImage: {
-                ["value-one"]: {
-                  S: "one"
-                },
-                ["value-two"]: {
-                  S: "two"
-                }
+              ["value-two"]: {
+                S: "two"
+              }
+            },
+            OldImage: {
+              ["value-one"]: {
+                S: "one"
+              },
+              ["value-two"]: {
+                S: "two"
               }
             }
-          }]
-        }
+          }
+        }]
       };
 
-      return dynamoStreamEventPromisifier(assembly, eventProcessorFunction, "blah").then(() => {
+      return dynamoStreamEventPromisifier(streamEvent, eventProcessorFunction, "blah").then(() => {
         assert.deepEqual(expectedResult, {
           delta: {
             diffList: [
