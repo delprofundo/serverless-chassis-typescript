@@ -3,7 +3,7 @@ import chaiAsPromised from "chai-as-promised";
 import sinon from "sinon";
 import sinonChai from "sinon-chai";
 import { AWSError, DynamoDB, Request } from "aws-sdk";
-import { putToDb, updateRecord } from "../../../src/lib/awsHelpers/dynamoCRUD.helper.library";
+import { putToDb, updateRecord } from "../../../../src/lib/awsHelpers/dynamoCRUD.helper.library";
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);

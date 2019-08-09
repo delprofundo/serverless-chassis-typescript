@@ -1,5 +1,5 @@
 import { should } from "chai";
-import { isAcceptablePageLimit, createBaseQueryParameters, lekMe} from "../../../src/lib/awsHelpers/query.helper.library";
+import { isAcceptablePageLimit, createBaseQueryParameters, lekMe} from "../../../../src/lib/awsHelpers/query.helper.library";
 
 should();
 describe("query.helper.library", () => {
