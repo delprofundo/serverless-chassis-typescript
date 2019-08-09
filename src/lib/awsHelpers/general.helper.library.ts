@@ -1,7 +1,4 @@
-import {
-    AsyncResponse,
-} from "../../interface/types";
-
+import { AsyncResponse } from "../../interface/types";
 import { v4String } from "uuid/interfaces";
 
 /**

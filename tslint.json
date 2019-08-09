@@ -19,7 +19,7 @@
         "trailing-comma": false,
         "interface-name" : [true, "never-prefix"],
         "no-implicit-dependencies": [true, "dev"],
-        "no-submodule-imports": [true, "uuid/interfaces"],
+        "no-submodule-imports": [true, "uuid/interfaces", "uuid/v4"],
         "no-console": {
             "severity": "warning",
             "options": ["debug", "info", "log", "time", "timeEnd", "trace"]
