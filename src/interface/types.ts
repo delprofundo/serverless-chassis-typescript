@@ -6,6 +6,7 @@
  * @module common/types
  */
 import { v4String } from "uuid/interfaces";
+import { DynamoDBStreamEvent } from "aws-lambda";
 
 /*
   Common Communication Types
@@ -52,4 +53,16 @@ export interface BaseQueryParameters {
   readonly TableName: string,
   readonly ExclusiveStartKey?: object,
   readonly Limit?: number
+}
+
+export interface DynamoStreamAssembly<T> {
+  readonly assembly: T;
+  readonly  streamEvent: DynamoDBStreamEvent;
+}
+
+export interface DynamoEventResponse {
+  readonly newRec: object,
+  readonly oldRec?: object,
+  readonly streamEventName: string,
+  readonly delta?: object
 }

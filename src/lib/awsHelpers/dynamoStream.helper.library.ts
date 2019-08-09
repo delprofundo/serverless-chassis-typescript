@@ -6,28 +6,31 @@
  * bruno@hypermedia.tech
  * @module dynamodb/queryHelper
  */
-import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
+import AWS from "aws-sdk";
 import * as logger from "log-winston-aws-level";
-import * as extractDynamoStreamDelta from "dynamo-stream-diff";
+import extractDynamoStreamDelta  from "dynamo-stream-diff";
+import { DynamoEventResponse, DynamoStreamAssembly } from "../../interface/types";
+import { DynamoDBRecord } from "aws-lambda";
 
 /**
  * helper to extract the useful contents from a dynamo stream record including new old and delta
  * @param dynamoRecord
  * @returns {{oldRec: any, newRec: any, streamEventName: DynamoDBStreams.OperationType}}
  */
-const processIndividualDynamoRecord = (dynamoRecord) => {
+const processIndividualDynamoRecord = (dynamoRecord: DynamoDBRecord): DynamoEventResponse => {
   const dynamoRecordParse = AWS.DynamoDB.Converter.output;
-  let response = {
+  let response: DynamoEventResponse = {
     newRec: dynamoRecordParse({ M: dynamoRecord.dynamodb.NewImage }),
     oldRec: dynamoRecordParse({ M: dynamoRecord.dynamodb.OldImage }),
     streamEventName: dynamoRecord.eventName,
     delta: undefined
   };
   if (dynamoRecord.eventName === "MODIFY") {
-    response = {...response, delta:extractDynamoStreamDelta(dynamoRecord)};
+    response = { ...response, delta: extractDynamoStreamDelta(dynamoRecord) };
   }
   return response;
 }; // end processIndividualDynamoRecord
+
 /**
  * HOF that takes a dynamoDb stream event, a processor function and a target
  * @param streamEventAssembly
@@ -35,8 +38,11 @@ const processIndividualDynamoRecord = (dynamoRecord) => {
  * @param target
  * @returns {Promise<any>}
  */
-const dynamoStreamEventPromisifier = async (streamEventAssembly, eventProcessorFunction, target) => {
-  const reducedEvents = streamEventAssembly.incomingRecords.map(processIndividualDynamoRecord);
+export const dynamoStreamEventPromisifier = async <T, U, V>(
+  streamEventAssembly: DynamoStreamAssembly<T>,
+  eventProcessorFunction: (ev: DynamoEventResponse, t: U) => V,
+  target: U) => {
+  const reducedEvents = streamEventAssembly.streamEvent.Records.map(processIndividualDynamoRecord);
   try {
     await Promise.all(
       reducedEvents.map(async (event) => {
@@ -48,5 +54,3 @@ const dynamoStreamEventPromisifier = async (streamEventAssembly, eventProcessorF
     throw err;
   }
 }; // end dynamoStreamEventPromisifier
-
-export default dynamoStreamEventPromisifier;
