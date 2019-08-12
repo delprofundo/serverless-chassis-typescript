@@ -1,6 +1,5 @@
 import { unstring, generateAsyncResponse } from "../../../../src/lib/awsHelpers/general.helper.library";
-import  v4  from "uuid/v4";
-import { v4String } from "uuid/interfaces";
+import { v4Uuid } from "../../../../src/interface/v4Uuid";
 
 describe("general helper", () => {
   context("unstring", () => {
@@ -14,7 +13,7 @@ describe("general helper", () => {
     });
     context("generate async response", () => {
       it("should convert to async response", () => {
-        const v4RecordId: v4String = v4;
+        const v4RecordId: v4Uuid = v4Uuid();
         generateAsyncResponse("200", v4RecordId, "record-type").should.deep.equal(
         {
           recordId: v4RecordId,

@@ -4,7 +4,7 @@ import {
 } from "../../interface/types";
 
 import { SSM } from "aws-sdk";
-import {v4String} from "uuid/interfaces";
+import { v4Uuid } from "../../interface/v4Uuid";
 
 /**
  * shortcut for unstringing a potentially stringed json thing
@@ -25,7 +25,7 @@ export const unstring = (item: object | string): object => {
  * @param recordType
  * @returns {{result: *, recordId: *, recordType: *}}
  */
-export const generateAsyncResponse = (resultCode: string, recordId: v4String, recordType: string): AsyncResponse => {
+export const generateAsyncResponse = (resultCode: string, recordId: v4Uuid, recordType: string): AsyncResponse => {
   return {
     result: resultCode,
     recordId,

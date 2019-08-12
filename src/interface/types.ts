@@ -5,7 +5,7 @@
  * bruno@hypermedia.tech
  * @module common/types
  */
-import { v4String } from "uuid/interfaces";
+import { v4Uuid } from "./v4Uuid";
 import { DynamoDBStreamEvent } from "aws-lambda";
 
 /*
@@ -13,7 +13,7 @@ import { DynamoDBStreamEvent } from "aws-lambda";
  */
 export interface AsyncResponse {
   readonly result: string;
-  readonly recordId: v4String;
+  readonly recordId: v4Uuid;
   readonly recordType: string;
   readonly responseMessage?: string;
   readonly traceId?: string;
@@ -43,7 +43,7 @@ export interface PermissionCheckParameters {
 } // end PermissionCheckParameters Interface
 
 export interface IamPolicyParameters {
-  readonly memberId: v4String;
+  readonly memberId: v4Uuid;
   readonly effect: string;
   readonly resource: string;
   readonly context?: FlexibleObject;

@@ -1,5 +1,5 @@
 import { AsyncResponse } from "../../interface/types";
-import { v4String } from "uuid/interfaces";
+import { v4Uuid } from "../../interface/v4Uuid";
 
 /**
  * shortcut for unstringing a potentially stringed json thing
@@ -20,7 +20,7 @@ export const unstring = (item: string | object): object => {
  * @param recordType
  * @returns {{result: *, recordId: *, recordType: *}}
  */
-export const generateAsyncResponse = (resultCode: string, recordId: v4String, recordType: string): AsyncResponse => {
+export const generateAsyncResponse = (resultCode: string, recordId: v4Uuid, recordType: string): AsyncResponse => {
     return {
         result: resultCode,
         recordId,
