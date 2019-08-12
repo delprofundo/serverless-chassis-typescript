@@ -1,5 +1,5 @@
-import { AsyncResponse } from "../../interface/types";
-import { v4Uuid } from "../../interface/v4Uuid";
+import { AsyncResponse } from "../../types/types";
+import { v4Uuid } from "../../types/v4Uuid";
 
 /**
  * shortcut for unstringing a potentially stringed json thing

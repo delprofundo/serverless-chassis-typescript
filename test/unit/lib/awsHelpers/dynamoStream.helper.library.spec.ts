@@ -1,7 +1,7 @@
 import chai, { assert } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { dynamoStreamEventPromisifier } from "../../../../src/lib/awsHelpers/dynamoStream.helper.library";
-import { DynamoEventResponse } from "../../../../src/interface/types";
+import { DynamoEventResponse } from "../../../../src/types/types";
 import { DynamoDBStreamEvent } from "aws-lambda";
 
 chai.use(chaiAsPromised);

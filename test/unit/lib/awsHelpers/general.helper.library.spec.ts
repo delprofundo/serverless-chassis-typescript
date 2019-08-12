@@ -1,5 +1,5 @@
 import { unstring, generateAsyncResponse } from "../../../../src/lib/awsHelpers/general.helper.library";
-import { v4Uuid } from "../../../../src/interface/v4Uuid";
+import { v4Uuid } from "../../../../src/types/v4Uuid";
 
 describe("general helper", () => {
   context("unstring", () => {

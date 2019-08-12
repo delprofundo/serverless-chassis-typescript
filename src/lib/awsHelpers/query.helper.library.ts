@@ -7,7 +7,7 @@
  * @module dynamodb/queryHelper
  */
 
-import { BaseQueryParameters } from "../../interface/types";
+import { BaseQueryParameters } from "../../types/types";
 
 /**
  * where a query accepts a custom page limit this is

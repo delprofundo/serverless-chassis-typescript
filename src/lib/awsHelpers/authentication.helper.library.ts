@@ -1,10 +1,10 @@
 import {
   AsyncResponse,
   AuthenticationParameters,
-} from "../../interface/types";
+} from "../../types/types";
 
 import { SSM } from "aws-sdk";
-import { v4Uuid } from "../../interface/v4Uuid";
+import { v4Uuid } from "../../types/v4Uuid";
 
 /**
  * shortcut for unstringing a potentially stringed json thing

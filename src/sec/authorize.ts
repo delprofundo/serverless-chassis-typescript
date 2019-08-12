@@ -9,7 +9,7 @@ import * as logger from "log-winston-aws-level";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import moment from "moment";
 import { decryptJWE } from "jwe-handler";
-import { IamPolicyParameters, PermissionCheckParameters } from "../interface/types";
+import { IamPolicyParameters, PermissionCheckParameters } from "../types/types";
 import { getAuthenticationParameters } from "../lib/awsHelpers/authentication.helper.library";
 import * as permissionsMatrix from "./permissionsMatrix";
 
