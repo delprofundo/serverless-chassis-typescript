@@ -7,8 +7,8 @@
 * bruno@hypermedia.tech
 ******************************************* */
 import * as logger from "log-winston-aws-level";
-import { PermissionCheckParameters } from "../types/types";
 import * as R from "ramda";
+import { PermissionCheckParameters } from "./sec.types";
 
 const { SERVICE_BASE_PATH } = process.env;
 

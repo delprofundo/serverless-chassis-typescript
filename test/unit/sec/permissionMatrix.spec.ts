@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { assert } from "chai";
 import validateAccess from "../../../src/sec/permissionsMatrix";
-import { PermissionCheckParameters } from "../../../src/types/types";
+import { PermissionCheckParameters } from "../../../src/sec/sec.types";
 
 describe("Permissions Matrix", () => {
   const denyEffect = { effect: "deny" };

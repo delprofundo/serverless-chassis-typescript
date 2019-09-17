@@ -10,7 +10,7 @@ import { createJWE } from "jwe-handler";
 import { JWE } from "node-jose";
 import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
 import { getSecretValue, getValue } from "../lib/awsHelpers/authentication.helper.library";
-import { AuthenticationParameters } from "../types/types";
+import { AuthenticationParameters } from "./sec.types";
 
 const { DEPLOY_REGION } = process.env;
 const { SYSTEM_MEMBER_ID_PATH } = process.env;
