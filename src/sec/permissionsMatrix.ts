@@ -1,13 +1,14 @@
 /** ******************************************
- * AUTH HARNESS PERMISSIONS MATRIX
- * simple matrix mapping permissions to functions in
- * this service.
- * 22 March 2018
- * delProfundo (@brunowatt)
- * bruno@hypermedia.tech
- ******************************************* */
+* AUTH HARNESS PERMISSIONS MATRIX
+* simple matrix mapping permissions to functions in
+* this service.
+* 22 March 2018
+* delProfundo (@brunowatt)
+* bruno@hypermedia.tech
+******************************************* */
 import * as logger from "log-winston-aws-level";
 import { PermissionCheckParameters } from "../types/types";
+import * as R from "ramda";
 
 const { SERVICE_BASE_PATH } = process.env;
 
@@ -28,17 +29,41 @@ const MEMBER_ROLES = {
   SYSTEM: "SYSTEM"
 };
 
-const METHODS = {
-  GET: "GET",
-  POST: "POST",
-  PUT: "PUT",
-  DELETE: "DELETE"
-};
+export interface ApiPermissionMatrix {
+  readonly path: string,
+  readonly resources: ApiResource[]
+}
 
+export interface ApiResource {
+  readonly resource: string
+  readonly methods: ResourceMethod[]
+}
+
+type Role = string;
+
+export interface ResourceMethod {
+  readonly method: HttpMethod
+  readonly allow: Role[]
+  readonly deny: Role[]
+}
+
+enum HttpMethod {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  DELETE = "DELETE"
+}
+
+export interface PermissionEffect {
+  readonly effect: "allow" | "deny";
+}
+
+export const PERMISSION_DENY: PermissionEffect = { effect: "deny" };
+export const PERMISSION_ALLOW: PermissionEffect = { effect: "allow" };
 /**
  * This array stores an object for each API path with nested entries allowing simple lookup of permissions
  */
-const permMatrix = [
+const permMatrix: ApiPermissionMatrix[] = [
   {
     path: `/${SERVICE_BASE_PATH}`,
     resources: [
@@ -46,12 +71,12 @@ const permMatrix = [
         resource: "/",
         methods: [
           {
-            method: METHODS.GET,
+            method: HttpMethod.GET,
             allow: [MEMBER_ROLES.MEMBER, MEMBER_ROLES.SYSTEM, MEMBER_ROLES.PLATFORM_ADMIN],
             deny: []
           },
           {
-            method: METHODS.POST,
+            method: HttpMethod.POST,
             allow: [MEMBER_ROLES.MEMBER, MEMBER_ROLES.PLATFORM_ADMIN],
             deny: []
           }
@@ -61,7 +86,7 @@ const permMatrix = [
         resource: "/{id}",
         methods: [
           {
-            method: METHODS.GET,
+            method: HttpMethod.GET,
             allow: [MEMBER_ROLES.MEMBER, MEMBER_ROLES.SYSTEM, MEMBER_ROLES.PLATFORM_ADMIN],
             deny: []
           }
@@ -71,7 +96,7 @@ const permMatrix = [
         resource: "/{id}/finalize",
         methods: [
           {
-            method: METHODS.PUT,
+            method: HttpMethod.PUT,
             allow: [MEMBER_ROLES.MEMBER],
             deny: []
           }
@@ -81,7 +106,7 @@ const permMatrix = [
         resource: "/echo",
         methods: [
           {
-            method: METHODS.POST,
+            method: HttpMethod.POST,
             allow: [MEMBER_ROLES.MEMBER],
             deny: []
           }
@@ -101,12 +126,12 @@ const permMatrix = [
  * @returns {Promise<{effect: string}>}
  */
 export default async function validateAccess({
-  path,
-  resource,
-  method,
-  memberRole,
-  clientType
-}: PermissionCheckParameters): Promise<object> {
+                                               path,
+                                               resource,
+                                               method,
+                                               memberRole,
+                                               clientType
+                                             }: PermissionCheckParameters): Promise<PermissionEffect> {
   // this is to switch between users/clients
   let effectiveEntity;
   if (memberRole) {
@@ -115,35 +140,33 @@ export default async function validateAccess({
     effectiveEntity = clientType;
   } else {
     logger.info("neither client or user type present, deny access");
-    return { effect: "deny" };
+    return PERMISSION_DENY;
   }
-  const pathObj = permMatrix.find((pathItem): boolean => {
-    return pathItem.path === path;
-  });
-  const resourceObj = pathObj.resources.find((resourceItem): boolean => {
-    return resourceItem.resource === resource;
-  });
-  if (typeof resourceObj === "undefined" || resourceObj === null) {
-    return { effect: "deny" };
-  }
-  const methodObj = resourceObj.methods.find((methodItem): boolean => {
-    return methodItem.method === method;
-  });
-  if (typeof methodObj === "undefined" || methodObj === null) {
-    return { effect: "deny" };
-  }
-  const deniedUser = methodObj.deny.find((denyItem): boolean => {
-    return denyItem === effectiveEntity;
-  });
-  if (deniedUser === effectiveEntity) {
-    return { effect: "deny" };
-  }
-  const permittedUser = methodObj.allow.find((accessItem): boolean => {
-    return accessItem === effectiveEntity;
-  });
-  if (typeof permittedUser === "undefined" || permittedUser === null) {
-    logger.info("failed as user type not in allow list");
-    return { effect: "deny" };
-  }
-  return { effect: "allow" };
+
+  return validateMappedResourceMethod(permMatrix, path, resource, method, effectiveEntity);
 }
+
+const validateMappedResourceMethod = (
+  permissionMatrix: ApiPermissionMatrix[],
+  path: string,
+  resource: string,
+  method: string,
+  integratorRole: string
+): PermissionEffect => {
+
+  const basePathFilter = R.compose(R.chain(R.prop<string, ApiResource[]>("resources")), R.filter(R.propEq("path", path)));
+  const resourcePathFilter = R.compose(R.chain(R.prop<string, ResourceMethod[]>("methods")), R.filter(R.propEq("resource", resource)));
+  const httpMethodFilter = R.filter(R.propEq("method", method));
+
+  const resourceAccess: ResourceMethod[] = R.compose(httpMethodFilter, resourcePathFilter, basePathFilter)(permissionMatrix);
+  if (R.isEmpty(resourceAccess)) {
+    return PERMISSION_DENY;
+  } else {
+    if (R.contains(integratorRole, resourceAccess[0].deny)) {
+      return PERMISSION_DENY;
+    }
+    return R.contains(integratorRole, resourceAccess[0].allow)
+      ? PERMISSION_ALLOW
+      : PERMISSION_DENY;
+  }
+};
