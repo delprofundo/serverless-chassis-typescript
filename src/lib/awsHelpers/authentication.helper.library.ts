@@ -1,8 +1,5 @@
-import {
-  AsyncResponse,
-  AuthenticationParameters,
-} from "../../types/types";
-
+import { AuthenticationParameters } from "../../sec/sec.types";
+import { AsyncResponse } from "../../types/types";
 import { SSM } from "aws-sdk";
 import { v4Uuid } from "../../types/v4Uuid";
 
