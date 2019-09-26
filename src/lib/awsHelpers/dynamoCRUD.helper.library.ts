@@ -14,7 +14,10 @@ import { DynamoDB } from "aws-sdk";
  * @param db
  * @returns {Promise<PromiseResult<D, E>>}
  */
-export const putToDb = async (dbItem: DynamoDB.DocumentClient.PutItemInput, db: DynamoDB.DocumentClient): Promise<DynamoDB.DocumentClient.PutItemOutput> => {
+export const putToDb = async (
+  dbItem: DynamoDB.DocumentClient.PutItemInput,
+  db: DynamoDB.DocumentClient
+): Promise<DynamoDB.DocumentClient.PutItemOutput> => {
   return db.put(dbItem).promise();
 }; // end putToDb
 
@@ -24,6 +27,9 @@ export const putToDb = async (dbItem: DynamoDB.DocumentClient.PutItemInput, db: 
  * @param db
  * @returns {Promise<ManagedUpload.SendData | PromiseResult<D, E>>}
  */
-export const updateRecord = async (updateParameters: DynamoDB.DocumentClient.UpdateItemInput, db: DynamoDB.DocumentClient): Promise<DynamoDB.DocumentClient.UpdateItemOutput>  => {
+export const updateRecord = async (
+  updateParameters: DynamoDB.DocumentClient.UpdateItemInput,
+  db: DynamoDB.DocumentClient
+): Promise<DynamoDB.DocumentClient.UpdateItemOutput> => {
   return db.update(updateParameters).promise();
 };

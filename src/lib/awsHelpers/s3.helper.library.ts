@@ -6,10 +6,9 @@
  * bruno@hypermedia.tech
  * @module s3/helper
  */
-import AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
+import AWS from "aws-sdk";
 
 import * as AWSXRay from "aws-xray-sdk-core";
-// eslint-disable-line import/no-extraneous-dependencies
 const AWS_WRAPPED = AWSXRay.captureAWS(AWS);
 
 const { DEPLOY_REGION } = process.env;
@@ -28,7 +27,11 @@ const MEDIA_TYPES = {
  * @param destinationBucket
  * @returns {Promise<void>}
  */
-export const copyBucketObject = async (objectKey: string, sourceBucket: string, destinationBucket: string): Promise<AWS.S3.CopyObjectResult> => {
+export const copyBucketObject = async (
+  objectKey: string,
+  sourceBucket: string,
+  destinationBucket: string
+): Promise<AWS.S3.CopyObjectResult> => {
   try {
     const response = await s3
       .copyObject({
@@ -43,7 +46,11 @@ export const copyBucketObject = async (objectKey: string, sourceBucket: string, 
   }
 }; // end copyBucketObject
 
-export const createMultipartUpload = async (objectKey: string, mediaType: string, bucket: string): Promise<AWS.S3.CreateMultipartUploadOutput> => {
+export const createMultipartUpload = async (
+  objectKey: string,
+  mediaType: string,
+  bucket: string
+): Promise<AWS.S3.CreateMultipartUploadOutput> => {
   try {
     return await s3
       .createMultipartUpload({
@@ -57,7 +64,9 @@ export const createMultipartUpload = async (objectKey: string, mediaType: string
   }
 }; // end createMultipartUpload
 
-export const completeMultiUpload = async (completionPayload: AWS.S3.CompleteMultipartUploadRequest): Promise<AWS.S3.CompleteMultipartUploadOutput> => {
+export const completeMultiUpload = async (
+  completionPayload: AWS.S3.CompleteMultipartUploadRequest
+): Promise<AWS.S3.CompleteMultipartUploadOutput> => {
   try {
     return s3.completeMultipartUpload(completionPayload).promise();
   } catch (err) {

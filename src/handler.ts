@@ -19,12 +19,12 @@ import * as util from "./lib/util.server.library";
  * ping - simple GET test
  */
 export const ping: APIGatewayProxyHandler = async (): Promise<APIGatewayProxyResult> => {
-    try {
-        return RESifySuccess(await util.ping());
-    } catch (err) {
-        logger.error("error in ping : ", err);
-        throw RESifyErr(err);
-    }
+  try {
+    return RESifySuccess(await util.ping());
+  } catch (err) {
+    logger.error("error in ping : ", err);
+    throw RESifyErr(err);
+  }
 }; // end ping
 
 /**
@@ -32,10 +32,10 @@ export const ping: APIGatewayProxyHandler = async (): Promise<APIGatewayProxyRes
  * @param event
  */
 export const echo: APIGatewayProxyHandler = async (event): Promise<APIGatewayProxyResult> => {
-    try {
-        return RESifySuccess(await util.echo(event.body));
-    } catch (err) {
-        logger.error("error in echo", err);
-        return RESifyErr(err);
-    }
+  try {
+    return RESifySuccess(await util.echo(event.body));
+  } catch (err) {
+    logger.error("error in echo", err);
+    return RESifyErr(err);
+  }
 }; // end echo

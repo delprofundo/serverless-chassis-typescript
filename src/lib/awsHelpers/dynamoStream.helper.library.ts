@@ -8,7 +8,7 @@
  */
 import AWS from "aws-sdk";
 import * as logger from "log-winston-aws-level";
-import extractDynamoStreamDelta  from "dynamo-stream-diff";
+import extractDynamoStreamDelta from "dynamo-stream-diff";
 import { DynamoEventResponse } from "../../types/types";
 import { DynamoDBRecord, DynamoDBStreamEvent } from "aws-lambda";
 
@@ -41,11 +41,12 @@ const processIndividualDynamoRecord = (dynamoRecord: DynamoDBRecord): DynamoEven
 export const dynamoStreamEventPromisifier = async <T>(
   streamEvent: DynamoDBStreamEvent,
   eventProcessorFunction: (ev: DynamoEventResponse, target: T) => void,
-  target: T) => {
+  target: T
+) => {
   const reducedEvents = streamEvent.Records.map(processIndividualDynamoRecord);
   try {
     await Promise.all(
-      reducedEvents.map(async (event) => {
+      reducedEvents.map(async event => {
         return eventProcessorFunction(event, target);
       })
     );

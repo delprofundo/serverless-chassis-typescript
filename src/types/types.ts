@@ -20,19 +20,19 @@ export interface AsyncResponse {
 } // end AsyncResponse interface
 
 export interface BaseQueryParameters {
-  readonly TableName: string,
-  readonly ExclusiveStartKey?: object,
-  readonly Limit?: number
+  readonly TableName: string;
+  readonly ExclusiveStartKey?: object;
+  readonly Limit?: number;
 }
 
 export interface DynamoStreamAssembly<T> {
   readonly assembly: T;
-  readonly  streamEvent: DynamoDBStreamEvent;
+  readonly streamEvent: DynamoDBStreamEvent;
 }
 
 export interface DynamoEventResponse {
-  readonly newRec: object,
-  readonly oldRec?: object,
-  readonly streamEventName: string,
-  readonly delta?: object
+  readonly newRec: object;
+  readonly oldRec?: object;
+  readonly streamEventName: string;
+  readonly delta?: object;
 }

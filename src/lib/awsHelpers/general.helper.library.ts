@@ -7,10 +7,10 @@ import { v4Uuid } from "../../types/v4Uuid";
  * @returns {*}
  */
 export const unstring = (item: string | object): object => {
-    if (typeof item === "string") {
-        return JSON.parse(item);
-    }
-    return item;
+  if (typeof item === "string") {
+    return JSON.parse(item);
+  }
+  return item;
 }; // end unstring
 
 /**
@@ -21,9 +21,9 @@ export const unstring = (item: string | object): object => {
  * @returns {{result: *, recordId: *, recordType: *}}
  */
 export const generateAsyncResponse = (resultCode: string, recordId: v4Uuid, recordType: string): AsyncResponse => {
-    return {
-        result: resultCode,
-        recordId,
-        recordType
-    };
+  return {
+    result: resultCode,
+    recordId,
+    recordType
+  };
 }; // end generateAsyncResponse

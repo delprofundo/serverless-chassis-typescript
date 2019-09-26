@@ -30,12 +30,19 @@ export const isAcceptablePageLimit = (candidateLimit: number, pageParams: any): 
  * @param pageParams
  * @returns {{TableName: *}}
  */
-export const createBaseQueryParameters = (table: string, queryStringParameters: any, pageParams: any): BaseQueryParameters => {
+export const createBaseQueryParameters = (
+  table: string,
+  queryStringParameters: any,
+  pageParams: any
+): BaseQueryParameters => {
   let baseQueryParameterObject: BaseQueryParameters = {
     TableName: table
   };
   if (queryStringParameters !== null && Object.prototype.hasOwnProperty.call(queryStringParameters, "lek")) {
-    baseQueryParameterObject = { ...baseQueryParameterObject, ExclusiveStartKey: JSON.parse(queryStringParameters.lek) };
+    baseQueryParameterObject = {
+      ...baseQueryParameterObject,
+      ExclusiveStartKey: JSON.parse(queryStringParameters.lek)
+    };
   }
   if (queryStringParameters !== null && Object.prototype.hasOwnProperty.call(queryStringParameters, "limit")) {
     const limit = isAcceptablePageLimit(queryStringParameters.limit, pageParams)

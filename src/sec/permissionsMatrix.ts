@@ -1,11 +1,11 @@
 /** ******************************************
-* AUTH HARNESS PERMISSIONS MATRIX
-* simple matrix mapping permissions to functions in
-* this service.
-* 22 March 2018
-* delProfundo (@brunowatt)
-* bruno@hypermedia.tech
-******************************************* */
+ * AUTH HARNESS PERMISSIONS MATRIX
+ * simple matrix mapping permissions to functions in
+ * this service.
+ * 22 March 2018
+ * delProfundo (@brunowatt)
+ * bruno@hypermedia.tech
+ ******************************************* */
 import * as logger from "log-winston-aws-level";
 import * as R from "ramda";
 import { PermissionCheckParameters } from "./sec.types";
@@ -30,21 +30,21 @@ const MEMBER_ROLES = {
 };
 
 export interface ApiPermissionMatrix {
-  readonly path: string,
-  readonly resources: ApiResource[]
+  readonly path: string;
+  readonly resources: ApiResource[];
 }
 
 export interface ApiResource {
-  readonly resource: string
-  readonly methods: ResourceMethod[]
+  readonly resource: string;
+  readonly methods: ResourceMethod[];
 }
 
 type Role = string;
 
 export interface ResourceMethod {
-  readonly method: HttpMethod
-  readonly allow: Role[]
-  readonly deny: Role[]
+  readonly method: HttpMethod;
+  readonly allow: Role[];
+  readonly deny: Role[];
 }
 
 enum HttpMethod {
@@ -126,12 +126,12 @@ const permMatrix: ApiPermissionMatrix[] = [
  * @returns {Promise<{effect: string}>}
  */
 export default async function validateAccess({
-                                               path,
-                                               resource,
-                                               method,
-                                               memberRole,
-                                               clientType
-                                             }: PermissionCheckParameters): Promise<PermissionEffect> {
+  path,
+  resource,
+  method,
+  memberRole,
+  clientType
+}: PermissionCheckParameters): Promise<PermissionEffect> {
   // this is to switch between users/clients
   let effectiveEntity;
   if (memberRole) {
@@ -153,20 +153,27 @@ const validateMappedResourceMethod = (
   method: string,
   integratorRole: string
 ): PermissionEffect => {
-
-  const basePathFilter = R.compose(R.chain(R.prop<string, ApiResource[]>("resources")), R.filter(R.propEq("path", path)));
-  const resourcePathFilter = R.compose(R.chain(R.prop<string, ResourceMethod[]>("methods")), R.filter(R.propEq("resource", resource)));
+  const basePathFilter = R.compose(
+    R.chain(R.prop<string, ApiResource[]>("resources")),
+    R.filter(R.propEq("path", path))
+  );
+  const resourcePathFilter = R.compose(
+    R.chain(R.prop<string, ResourceMethod[]>("methods")),
+    R.filter(R.propEq("resource", resource))
+  );
   const httpMethodFilter = R.filter(R.propEq("method", method));
 
-  const resourceAccess: ResourceMethod[] = R.compose(httpMethodFilter, resourcePathFilter, basePathFilter)(permissionMatrix);
+  const resourceAccess: ResourceMethod[] = R.compose(
+    httpMethodFilter,
+    resourcePathFilter,
+    basePathFilter
+  )(permissionMatrix);
   if (R.isEmpty(resourceAccess)) {
     return PERMISSION_DENY;
   } else {
     if (R.contains(integratorRole, resourceAccess[0].deny)) {
       return PERMISSION_DENY;
     }
-    return R.contains(integratorRole, resourceAccess[0].allow)
-      ? PERMISSION_ALLOW
-      : PERMISSION_DENY;
+    return R.contains(integratorRole, resourceAccess[0].allow) ? PERMISSION_ALLOW : PERMISSION_DENY;
   }
 };

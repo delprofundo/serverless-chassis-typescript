@@ -6,7 +6,7 @@
  * @module sec/authorize
  */
 import * as logger from "log-winston-aws-level";
-import * as AWS from "aws-sdk"; // eslint-disable-line import/no-extraneous-dependencies
+import * as AWS from "aws-sdk";
 import moment from "moment";
 import { decryptJWE } from "jwe-handler";
 import { IamPolicyParameters, PermissionCheckParameters } from "./sec.types";

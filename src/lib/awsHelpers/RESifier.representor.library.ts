@@ -11,7 +11,7 @@ import { APIGatewayProxyResult } from "aws-lambda";
  * @param statusCode
  * @returns {{body: string, statusCode: number, headers: {"Access-Control-Allow-Origin": string, "Access-Control-Allow-Credentials": boolean}}}
  */
-export const RESifySuccess = (candidateObject: object, statusCode: number = 200): APIGatewayProxyResult => {
+export const RESifySuccess = (candidateObject: object, statusCode = 200): APIGatewayProxyResult => {
   return {
     body: JSON.stringify(candidateObject),
     statusCode,
@@ -29,7 +29,7 @@ export const RESifySuccess = (candidateObject: object, statusCode: number = 200)
  * @param statusCode
  * @returns {{body: string, statusCode: *, headers: {"Access-Control-Allow-Origin": string, "Access-Control-Allow-Credentials": boolean}}}
  */
-export const RESifyErr = (errorResponse: Error, statusCode: number = 500): APIGatewayProxyResult => {
+export const RESifyErr = (errorResponse: Error, statusCode = 500): APIGatewayProxyResult => {
   return {
     body: JSON.stringify({ message: errorResponse.message }),
     statusCode,

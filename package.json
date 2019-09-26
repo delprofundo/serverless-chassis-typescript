@@ -10,8 +10,7 @@
     "test:cover": "nyc mocha",
     "test:e2e": "mocha --quiet --require should --timeout 10000 'test/e2e/**/**.spec.js'",
     "docs": "./node_modules/.bin/jsdoc -c jsdoc.json -r",
-    "tslint": "tslint --project . --fix",
-    "tslint-check": "tslint-config-prettier-check ./tslint.json"
+    "test:eslint": "eslint src/ --ext .ts --fix"
   },
   "repository": {
     "type": "git",
@@ -54,6 +53,9 @@
     "copy-webpack-plugin": "^5.0.4",
     "cross-env": "6.0.0",
     "dotenv": "^8.1.0",
+    "eslint": "^6.4.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "istanbul": "0.4.5",
     "js-yaml": "3.13.1",
     "jsdoc": "3.6.3",
@@ -71,13 +73,12 @@
     "sinon-chai": "^3.3.0",
     "ts-loader": "^6.1.2",
     "ts-node": "8.4.1",
-    "tslint": "^5.20.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-immutable": "^6.0.1",
     "webpack": "^4.41.0",
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.3.1",
+    "@typescript-eslint/parser": "^2.3.1",
     "aws-xray-sdk-core": "^2.3.6",
     "dynamo-stream-diff": "0.1.0",
     "jwe-handler": "^3.0.0",

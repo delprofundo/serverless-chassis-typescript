@@ -40,11 +40,11 @@ export const getSecretValue = async (key: string, ssm: SSM): Promise<string> => 
   try {
     const param = await ssm
       .getParameters({
-        Names: [ key ],
+        Names: [key],
         WithDecryption: true
       })
       .promise();
-    return param.Parameters[ 0 ].Value;
+    return param.Parameters[0].Value;
   } catch (err) {
     throw err;
   }
@@ -72,7 +72,10 @@ export const getValue = async (key: string, ssm: SSM): Promise<string> => {
  * @param jwaPem
  * @param ssm
  */
-export const getAuthenticationParameters = async ({ maxTokenExpiry, systemMemberId, jwaPem }: AuthenticationParameters , ssm: SSM) => {
+export const getAuthenticationParameters = async (
+  { maxTokenExpiry, systemMemberId, jwaPem }: AuthenticationParameters,
+  ssm: SSM
+) => {
   const resultArr = await Promise.all([
     await getSecretValue(jwaPem, ssm),
     await getValue(maxTokenExpiry, ssm),
