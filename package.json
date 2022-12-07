@@ -64,7 +64,7 @@
     "nyc": "^15.0.0",
     "prettier": "^1.19.1",
     "rewire": "4.0.1",
-    "serverless": "^1.63.0",
+    "serverless": "^3.25.1",
     "serverless-plugin-bind-deployment-id": "^1.1.1",
     "serverless-plugin-tracing": "2.0.0",
     "serverless-plugin-warmup": "^4.8.0",
